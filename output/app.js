@@ -187,16 +187,16 @@ if (!(canvas_element == null)) {
         black_ball: {
           x: 100,
           y: canvas_state_height - 20 | 0,
-          dx: 1,
-          dy: -1,
+          dx: 2,
+          dy: -2,
           radius: 10,
           color: /* Black */0
         },
         white_ball: {
           x: (canvas_state_width - 40 | 0) - 20 | 0,
           y: 10,
-          dx: -1,
-          dy: 1,
+          dx: -2,
+          dy: 2,
           radius: 10,
           color: /* White */1
         },

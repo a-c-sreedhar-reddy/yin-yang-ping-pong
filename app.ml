@@ -155,8 +155,8 @@ match canvas_element with
           {
             x = (2 * cell_side) + (2 * ball_radius);
             y = canvas_state.height - (2 * ball_radius);
-            dx = 1;
-            dy = -1;
+            dx = 2;
+            dy = -2;
             radius = ball_radius;
             color = Black;
           };
@@ -164,8 +164,8 @@ match canvas_element with
           {
             x = canvas_state.width - cell_side - (2 * ball_radius);
             y = ball_radius;
-            dx = -1;
-            dy = 1;
+            dx = -2;
+            dy = 2;
             radius = ball_radius;
             color = White;
           };
