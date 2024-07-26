@@ -40,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Esy
-        uses: esy/github-action@v1
+        uses: esy/github-action@208f825b87fd20cd0cec0343b0c6b5927a406d49
 
       - name: Install dependencies with Esy
         run: esy
