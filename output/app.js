@@ -175,12 +175,10 @@ function loop(canvas_state, state) {
 const canvas_element = document.getElementById("canvas");
 
 if (!(canvas_element == null)) {
-  canvas_element.getContext("2d");
   const canvas_state_ctx = canvas_element.getContext("2d");
   const canvas_state_height = canvas_element.height;
   const canvas_state_width = canvas_element.width;
   const canvas_state = {
-    element: canvas_element,
     ctx: canvas_state_ctx,
     height: canvas_state_height,
     width: canvas_state_width

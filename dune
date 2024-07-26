@@ -3,8 +3,3 @@
  (libraries melange-webapi)
  (module_systems es6)
  (promote (until-clean)))
-
-(env
- (dev
-  (flags
-   (:standard -warn-error -A))))

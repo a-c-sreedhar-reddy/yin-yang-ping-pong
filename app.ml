@@ -13,7 +13,6 @@ type cell = { row : int; col : int; color : color }
 type state = { black_ball : ball; white_ball : ball; cells : cell list }
 
 type canvas_state = {
-  element : Dom.element;
   ctx : Webapi.Canvas.Canvas2d.t;
   height : int;
   width : int;
@@ -142,12 +141,8 @@ let canvas_element =
 
 match canvas_element with
 | Some canvas_element ->
-    let _canvas_context =
-      canvas_element |> Webapi.Canvas.CanvasElement.getContext2d
-    in
     let canvas_state =
       {
-        element = canvas_element;
         height = Webapi.Canvas.CanvasElement.height canvas_element;
         width = Webapi.Canvas.CanvasElement.width canvas_element;
         ctx = Webapi.Canvas.CanvasElement.getContext2d canvas_element;
