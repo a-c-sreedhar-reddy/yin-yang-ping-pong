@@ -1,5 +1,4 @@
 (melange.emit
  (target output)
  (libraries melange-webapi)
- (module_systems es6)
- (promote (until-clean)))
+ (module_systems es6))

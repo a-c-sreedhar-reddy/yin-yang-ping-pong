@@ -11,5 +11,9 @@
     "@opam/ocaml-lsp-server": "*",
     "@opam/ocamlformat": "*",
     "@opam/ocamlformat-rpc": "*"
+  },
+  "esy": {
+    "build": ["dune build"],
+    "buildsInSource": "_build"
   }
 }

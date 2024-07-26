@@ -41,11 +41,12 @@ jobs:
         run: yarn
       - name: Esy
         uses: esy/github-action@208f825b87fd20cd0cec0343b0c6b5927a406d49
+        with:
+          setup-esy-npm-package: "esy"
+          setup-esy-version: "dev"
+          source-cache-key: 20240515-1
+          cache-key: ${{ hashFiles('esy.lock/index.json') }}-20240515-1
 
-      - name: Install dependencies with Esy
-        run: esy
-      - name: Build with Esy
-        run: esy dune build
       - name: Build
         run: yarn build
       - name: Setup Pages
