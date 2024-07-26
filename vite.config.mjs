@@ -9,4 +9,9 @@ export default defineConfig({
     },
   },
   base: "/yin-yang-ping-pong/",
+  build: {
+    rollupOptions: {
+      external: [/^melange*/],
+    },
+  },
 });
