@@ -11,7 +11,6 @@ type ball = {
 }
 
 type cell = { row : int; col : int; color : color }
-type state = { balls : ball list; cells : cell list }
 
 type canvas_state = {
   ctx : Webapi.Canvas.Canvas2d.t;
@@ -21,36 +20,53 @@ type canvas_state = {
 
 let cell_side = 40
 
-let move_balls canvas_state state =
-  let balls =
-    state.balls
-    |> List.fold_left
-         (fun balls ball ->
-           let ball =
-             if
-               ball.x + ball.dx > canvas_state.width - ball.radius
-               || ball.x + ball.dx < ball.radius
-             then { ball with dx = -ball.dx }
-             else ball
-           in
-           let ball =
-             if
-               ball.y + ball.dy > canvas_state.height - ball.radius
-               || ball.y + ball.dy < ball.radius
-             then { ball with dy = -ball.dy }
-             else ball
-           in
-           { ball with x = ball.x + ball.dx; y = ball.y + ball.dy } :: balls)
-         []
-  in
-  { state with balls }
+module Game = struct
+  type t = { balls : ball list; cells : cell list }
 
-let cell_and_ball_collides (cell : cell) ball =
-  ball.x >= (cell.col * cell_side) - ball.radius
-  && ball.x <= (cell.col * cell_side) + cell_side + ball.radius
-  && ball.y >= (cell.row * cell_side) - ball.radius
-  && ball.y <= (cell.row * cell_side) + cell_side + ball.radius
-  && ball.color == cell.color
+  let should_ball_bounce_horizontal ball board_width =
+    ball.x + ball.dx > board_width - ball.radius
+    || ball.x + ball.dx < ball.radius
+
+  let should_ball_bounce_vertical ball board_height =
+    ball.y + ball.dy > board_height - ball.radius
+    || ball.y + ball.dy < ball.radius
+
+  let move_balls canvas_state state =
+    let balls =
+      state.balls
+      |> List.fold_left
+           (fun balls ball ->
+             let dx =
+               if should_ball_bounce_horizontal ball canvas_state.width then
+                 -ball.dx
+               else ball.dx
+             in
+             let dy =
+               if should_ball_bounce_vertical ball canvas_state.height then
+                 -ball.dy
+               else ball.dy
+             in
+             { ball with dx; dy; x = ball.x + dx; y = ball.y + dy } :: balls)
+           []
+    in
+    { state with balls }
+end
+
+module Ball = struct
+  let collides_with_cell (cell : cell) (ball : ball) =
+    if ball.color != cell.color then false
+    else
+      let ball_in_cell_horizontal =
+        ball.x >= (cell.col * cell_side) - ball.radius
+        && ball.x <= (cell.col * cell_side) + cell_side + ball.radius
+      in
+      let ball_in_cell_vertical =
+        ball.y >= (cell.row * cell_side) - ball.radius
+        && ball.y <= (cell.row * cell_side) + cell_side + ball.radius
+      in
+
+      ball_in_cell_horizontal && ball_in_cell_vertical
+end
 
 let toggle_color = function White -> Black | Black -> White
 
@@ -59,7 +75,7 @@ let horizontal_collision cell ball =
   || ball.x - ball.radius >= (cell.col * cell_side) + cell_side
 
 let cell_and_ball_after_collision cell ball =
-  if cell_and_ball_collides cell ball then
+  if Ball.collides_with_cell cell ball then
     let ball =
       if horizontal_collision cell ball then { ball with dx = -ball.dx }
       else { ball with dy = -ball.dy }
@@ -68,15 +84,16 @@ let cell_and_ball_after_collision cell ball =
     ({ cell with color = toggle_color cell.color }, ball)
   else (cell, ball)
 
-let balls_collision_detection state =
+let balls_collision_detection (state : Game.t) =
   state.balls
   |> List.fold_left
-       (fun state (ball : ball) ->
+       (fun (state : Game.t) (ball : ball) ->
          let cells =
            state.cells |> List.filter (fun cell -> cell.color == ball.color)
          in
          let colliding_cell =
-           cells |> List.find_opt (fun cell -> cell_and_ball_collides cell ball)
+           cells
+           |> List.find_opt (fun cell -> Ball.collides_with_cell cell ball)
          in
 
          match colliding_cell with
@@ -100,10 +117,10 @@ let balls_collision_detection state =
          | None -> state)
        state
 
-let next_state canvas_state state : state =
-  state |> balls_collision_detection |> move_balls canvas_state
+let next_state canvas_state state =
+  state |> balls_collision_detection |> Game.move_balls canvas_state
 
-let draw_cells canvas_state state =
+let draw_cells canvas_state (state : Game.t) =
   state.cells
   |> List.iter (fun cell ->
          let open Webapi.Canvas.Canvas2d in
@@ -117,7 +134,7 @@ let draw_cells canvas_state state =
          fill canvas_state.ctx;
          closePath canvas_state.ctx)
 
-let draw_balls canvas_state state =
+let draw_balls canvas_state (state : Game.t) =
   state.balls
   |> List.iter (fun ball ->
          let ctx = canvas_state.ctx in
