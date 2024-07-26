@@ -36,7 +36,7 @@ jobs:
           node-version: 20
           cache: "yarn"
       - name: Install esy
-        run: npm install -g esy
+        run: npm install -g esy@dev
       - name: Install dependencies
         run: yarn
       - name: Esy
