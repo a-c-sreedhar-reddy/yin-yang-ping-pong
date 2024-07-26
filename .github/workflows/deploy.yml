@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Esy
-        uses: esy/github-action@v2
+        uses: esy/github-action@v1
         with:
           cache-key: ${{ hashFiles('esy.lock/index.json') }}
       - name: Install dependencies with Esy
