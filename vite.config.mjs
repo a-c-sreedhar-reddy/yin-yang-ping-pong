@@ -8,4 +8,5 @@ export default defineConfig({
       ignored: ["**/_opam"],
     },
   },
+  base: "/yin-yang-ping-pong/",
 });
