@@ -1,0 +1,15 @@
+{
+  "name": "app",
+  "dependencies": {
+    "ocaml": "5.x",
+    "@opam/melange": "*",
+    "@opam/reason": "*",
+    "@opam/melange-webapi": "*",
+    "@opam/dune": "*"
+  },
+  "devDependencies": {
+    "@opam/ocaml-lsp-server": "*",
+    "@opam/ocamlformat": "*",
+    "@opam/ocamlformat-rpc": "*"
+  }
+}
