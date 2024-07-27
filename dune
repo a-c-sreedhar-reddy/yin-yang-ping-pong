@@ -2,3 +2,5 @@
  (target output)
  (libraries melange-webapi)
  (module_systems es6))
+
+(dirs :standard \ node_modules)
