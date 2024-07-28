@@ -3,4 +3,6 @@
  (libraries melange-webapi)
  (module_systems es6))
 
+(include_subdirs unqualified)
+
 (dirs :standard \ node_modules)
